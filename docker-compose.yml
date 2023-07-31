@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: backend
+  ui:
+    build:
+      context: ui
+    ports:
+      - "3000:3000"
