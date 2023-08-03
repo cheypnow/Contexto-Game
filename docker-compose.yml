@@ -4,8 +4,18 @@ services:
   backend:
     build:
       context: backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - /tmp/contexto-model/:/model/
   ui:
     build:
       context: ui
+    volumes:
+      - ./ui/:/app/
+      # prevent host system's node_modules to be mounted
+      - exclude:/app/node_modules/
     ports:
       - "3000:3000"
+volumes:
+  exclude:
