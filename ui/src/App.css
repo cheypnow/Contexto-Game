@@ -46,7 +46,7 @@ button {
 }
 
 .medium {
-    color: light yellow;
+    color: darkkhaki;
 }
 
 .high {
@@ -76,4 +76,8 @@ button {
     min-height: 40px;
     font-weight: 700;
     align-items: center;
+}
+
+.input_error {
+    color: red
 }

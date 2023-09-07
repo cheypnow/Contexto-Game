@@ -1,10 +1,13 @@
 import gensim
-import logging as log
+import logging
 import gensim.downloader as downloader
 import os
+from .unknown_word_exception import UnknownWordException
 
-model_path = 'model/word2vec-google-news-300'
-model_name = 'word2vec-google-news-300'
+model_path = 'model/glove-twitter-25'
+model_name = 'glove-twitter-25'
+
+log = logging.getLogger("contexto")
 
 
 def download_model():
@@ -33,7 +36,12 @@ class SimilarityScorer:
         download_model()
         self.model = gensim.models.KeyedVectors.load(model_path)
 
-    def get_similarity(self, word1: str, word2: str):
-        similarity = self.model.similarity(word1, word2).item()
-        return round(round_similarity(similarity) * 100)
+    def get_similarity(self, today_word: str, guess: str):
+        try:
+            similarity = self.model.similarity(today_word, guess).item()
+        except KeyError:
+            msg = f"KeyError on words: '{today_word}','{guess}'"
+            log.error(msg)
+            raise UnknownWordException(guess)
 
+        return round(round_similarity(similarity) * 100)

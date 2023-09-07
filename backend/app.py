@@ -1,9 +1,16 @@
 from fastapi import FastAPI
-import logging as log
 from words_api import get_today_word
 from scorer.similarity_scorer import SimilarityScorer
 from fastapi.middleware.cors import CORSMiddleware
 from sys import stdout
+from scorer.unknown_word_exception import UnknownWordException
+from logging.config import dictConfig
+import logging
+from config import LogConfig
+
+dictConfig(LogConfig().dict())
+
+log = logging.getLogger("contexto")
 
 app = FastAPI()
 scorer = SimilarityScorer()
@@ -18,19 +25,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Define logger
-logger = log.getLogger('mylogger')
-
-logger.setLevel(log.DEBUG)
-logFormatter = log.Formatter("%(name)-12s %(asctime)s %(levelname)-8s %(filename)s:%(funcName)s %(message)s")
-consoleHandler = log.StreamHandler(stdout)
-consoleHandler.setFormatter(logFormatter)
-logger.addHandler(consoleHandler)
-
 
 @app.get("/similarity")
 async def get_similarity(guess: str):
-    log.info(f"Guess: {str}")
+    log.info(f"Guess: {guess}")
 
     today_word = get_today_word()
 
@@ -39,9 +37,14 @@ async def get_similarity(guess: str):
             "similarity": 100
         }
 
-    log.info(f"Compute similarity for {today_word} and {guess}")
+    log.info(f"Compute similarity for '{today_word}' and '{guess}'")
 
-    similarity = scorer.get_similarity(word1=today_word, word2=guess)
+    try:
+        similarity = scorer.get_similarity(today_word=today_word, guess=guess)
+    except UnknownWordException as e:
+        return {
+            "unknown_word": e.word
+        }
 
     return {
         "similarity": similarity

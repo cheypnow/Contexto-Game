@@ -7,3 +7,4 @@ seaborn==0.8
 nltk==3.8.1
 fastapi==0.100.1
 uvicorn==0.20.0
+pydantic==2.3.0

@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from "react";
 import './App.css';
 
+type Response = {
+    similarity?: number,
+    unknown_word?: string
+}
 
 const App: React.FC = () => {
   const [guess, setGuess] = useState("");
   const [positions, setPositions] = useState<Array<{ word: string; position: number }>>([]);
+  const [inputError, setInputError] = useState(false)
 
   const handleGuess = async () => {
       // Make a request to the backend API to get the word similarity
       try {
         const response = await fetch('http://127.0.0.1:8000/similarity?guess=' + guess);
-        const data = await response.json();
-        const position = data.similarity;
+        const data: Response = await response.json();
+
+        if (data.unknown_word) {
+            setInputError(true);
+            return;
+        }
+
+        setInputError(false);
+
+        const position = data.similarity!;
         setPositions((prevPositions) => [...prevPositions, { word: guess, position }]);
         setGuess("");
       } catch (error) {
@@ -32,6 +45,7 @@ const App: React.FC = () => {
         value={guess}
         onChange={(e) => setGuess(e.target.value)}
         placeholder="Enter your guess"
+        className = {inputError ? "input_error" : ""}
       />
       </div>
       <button onClick={handleGuess}>Submit</button>

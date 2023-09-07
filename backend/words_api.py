@@ -1,36 +1,34 @@
 from datetime import datetime
 
 words = [
+    'teenager',
+    'desire',
+    'navy',
+    'love',
     'error',
     'supermarket',
     'media',
     'technology',
     'girl',
     'disaster',
-    'thing',
-    'country',
     'literature',
     'medicine',
     'promotion',
     'ability',
+    'arise',
+    'morale'
+    'dilute',
+    'enhance',
+    'country',
+    'drawing',
     'excitement',
     'painting',
     'insurance',
     'disk',
     'response',
     'church',
-    'drawing',
     'winner',
     'factory'
-    'teenager',
-    'desire',
-    'navy',
-    'love',
-    'arise',
-    'morale'
-    'dilute',
-    'admission',
-    'enhance'
 ]
 
 
