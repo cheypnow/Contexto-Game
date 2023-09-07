@@ -33,19 +33,21 @@ const App: React.FC = () => {
     <div className="App">
       <h1>Contexto Game</h1>
       <p>Find the secret word. You have unlimited guesses.</p>
+      <div>
       <input
         type="text"
         value={guess}
         onChange={(e) => setGuess(e.target.value)}
         placeholder="Enter your guess"
       />
+      </div>
       <button onClick={handleGuess}>Submit</button>
       <div>
-        <h2>Word Positions:</h2>
         <ul>
           {sortedPositions.map((pos, index) => (
-            <div key={index}>
-              {pos.word}: {pos.position}
+            <div key={index} className={getPositionStyle(pos.position) + " list_value"}>
+              <span>{pos.word}: </span>
+              <span>{pos.position} </span>
             </div>
           ))}
         </ul>
@@ -53,6 +55,18 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+function getPositionStyle(position: number) {
+    switch(true){
+        case position < 0.2: return 'low';
+        case position < 0.4: return 'ok';
+        case position < 0.6: return 'medium';
+        case position < 0.8: return 'high';
+        case position < 0.99: return 'close';
+        case position == 1: return 'exact';
+        default: return "exact";
+    }
+}
 
 export default App;
 
