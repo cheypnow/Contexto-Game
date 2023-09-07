@@ -20,7 +20,17 @@ words = [
     'response',
     'church',
     'drawing',
-    'winner'
+    'winner',
+    'factory'
+    'teenager',
+    'desire',
+    'navy',
+    'love',
+    'arise',
+    'morale'
+    'dilute',
+    'admission',
+    'enhance'
 ]
 
 
