@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import logo from './logo.svg';
 import './App.css';
 
 
@@ -40,7 +39,7 @@ const App: React.FC = () => {
         <ul>
           {sortedPositions.map((pos, index) => (
             <div key={index} className={getPositionStyle(pos.position) + " list_value"}>
-              <span>{pos.word}: </span>
+              <span>{pos.word} </span>
               <span>{pos.position} </span>
             </div>
           ))}
