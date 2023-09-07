@@ -20,6 +20,12 @@ def download_model():
         log.info("Skip model downloading")
 
 
+def round_similarity(similarity):
+    if similarity < 0.01:
+        return 0.01
+    return round(similarity, 2)
+
+
 class SimilarityScorer:
 
     def __init__(self):
@@ -28,5 +34,6 @@ class SimilarityScorer:
         self.model = gensim.models.KeyedVectors.load(model_path)
 
     def get_similarity(self, word1: str, word2: str):
-        return self.model.similarity(word1, word2).item()
+        similarity = self.model.similarity(word1, word2).item()
+        return round(round_similarity(similarity) * 100)
 
