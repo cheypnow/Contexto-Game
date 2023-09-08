@@ -9,6 +9,11 @@ type Response = {
     unknown_word?: string
 }
 
+type GiveUpResponse = {
+    word: string,
+    similarity: number
+}
+
 type Tip = {
     tip: string,
     similarity: number
@@ -50,6 +55,16 @@ const App: React.FC = () => {
       }
     };
 
+  const handleGiveUp = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/giveup');
+        const giveUpResponse: GiveUpResponse = await response.json();
+        setPositions((prevPositions) => [...prevPositions, { word: giveUpResponse.word, position: giveUpResponse.similarity }]);
+      } catch (error) {
+        console.error("Error fetching give up:", error);
+      }
+    };
+
 
   const sortedPositions = [...positions].sort((a, b) => b.position - a.position);
 
@@ -74,6 +89,7 @@ const App: React.FC = () => {
             </Dropdown.Toggle>
             <Dropdown.Menu>
                 <Dropdown.Item onClick={handleTip}>Tip</Dropdown.Item>
+                <Dropdown.Item onClick={handleGiveUp}>Give Up</Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>
       </div>

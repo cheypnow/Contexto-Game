@@ -60,3 +60,11 @@ async def get_tip():
         "tip": tip,
         "similarity": similarity
     }
+
+
+@app.get("/giveup")
+async def get_tip():
+    return {
+        "word": get_today_word(),
+        "similarity": 100
+    }
