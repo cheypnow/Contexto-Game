@@ -45,3 +45,6 @@ class SimilarityScorer:
             raise UnknownWordException(guess)
 
         return round(round_similarity(similarity) * 100)
+
+    def get_similar(self, today_word: str, n: int = 10):
+        return self.model.most_similar(positive=[today_word], topn=n)

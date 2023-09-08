@@ -4,6 +4,7 @@ from scorer.similarity_scorer import SimilarityScorer
 from fastapi.middleware.cors import CORSMiddleware
 from sys import stdout
 from scorer.unknown_word_exception import UnknownWordException
+from tips import TipsService
 from logging.config import dictConfig
 import logging
 from config import LogConfig
@@ -14,6 +15,7 @@ log = logging.getLogger("contexto")
 
 app = FastAPI()
 scorer = SimilarityScorer()
+tips_service = TipsService(scorer)
 
 origins = ["*"]
 
@@ -47,5 +49,14 @@ async def get_similarity(guess: str):
         }
 
     return {
+        "similarity": similarity
+    }
+
+
+@app.get("/tip")
+async def get_tip():
+    tip, similarity = tips_service.get_tip(get_today_word())
+    return {
+        "tip": tip,
         "similarity": similarity
     }

@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
-import './App.css';
+import Dropdown from 'react-bootstrap/Dropdown';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import './App.scss';
 
 type Response = {
     similarity?: number,
     unknown_word?: string
+}
+
+type Tip = {
+    tip: string,
+    similarity: number
 }
 
 const App: React.FC = () => {
@@ -32,6 +40,16 @@ const App: React.FC = () => {
       }
     };
 
+  const handleTip = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/tip');
+        const tip: Tip = await response.json();
+        setPositions((prevPositions) => [...prevPositions, { word: tip.tip, position: tip.similarity }]);
+      } catch (error) {
+        console.error("Error fetching tip:", error);
+      }
+    };
+
 
   const sortedPositions = [...positions].sort((a, b) => b.position - a.position);
 
@@ -48,7 +66,17 @@ const App: React.FC = () => {
         className = {inputError ? "input_error" : ""}
       />
       </div>
-      <button onClick={handleGuess}>Submit</button>
+      <div className='buttons_block'>
+        <button className="submit_button" onClick={handleGuess}>Submit</button>
+        <Dropdown>
+            <Dropdown.Toggle variant="dropdown-custom" id="dropdown-custom">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path></svg>
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+                <Dropdown.Item onClick={handleTip}>Tip</Dropdown.Item>
+            </Dropdown.Menu>
+        </Dropdown>
+      </div>
       <div>
         <ul>
           {sortedPositions.map((pos, index) => (
